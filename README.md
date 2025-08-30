@@ -85,25 +85,43 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 ## Project Structure
 
 ```
-├── app/                    # Next.js App Router
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Main page
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   ├── auth-provider.tsx # Authentication context
-│   ├── auth-form.tsx     # Login/signup form
-│   ├── main-app.tsx      # Main application
-│   ├── navigation.tsx    # Navigation bar
-│   ├── poem-feed.tsx     # Poetry feed
-│   ├── poem-card.tsx     # Individual poem display
-│   ├── create-poem.tsx   # Poem creation form
-│   └── profile.tsx       # User profile
-├── lib/                  # Utility functions
-│   ├── supabase.ts       # Supabase client
-│   └── utils.ts          # Helper functions
-├── supabase-setup.sql    # Database setup script
-└── README.md            # This file
+├── app/                      # Next.js App Router
+│   ├── globals.css           # Global styles
+│   ├── layout.tsx            # Root layout
+│   └── page.tsx              # Main page
+├── components/               # React components
+│   ├── auth-form.tsx         # Login/signup form
+│   ├── auth-provider.tsx     # Authentication context
+│   ├── create-poem.tsx       # Poem creation form
+│   ├── loading-spinner.tsx   # Loading spinner
+│   ├── main-app.tsx          # Main application
+│   ├── navigation.tsx        # Navigation bar
+│   ├── poem-card.tsx         # Individual poem display
+│   ├── poem-feed.tsx         # Poetry feed
+│   ├── profile.tsx           # User profile
+│   └── ui/                   # Reusable UI components
+│       ├── alert.tsx         # Alert component
+│       ├── button.tsx        # Button component
+│       ├── card.tsx          # Card component
+│       ├── input.tsx         # Input component
+│       ├── label.tsx         # Label component
+│       ├── tabs.tsx          # Tabs component
+│       └── textarea.tsx      # Textarea component
+├── lib/                      # Utility functions
+│   ├── supabase.ts           # Supabase client
+│   └── utils.ts              # Helper functions
+├── .gitignore                # Git ignore file
+├── DEPLOYMENT.md             # Deployment instructions
+├── env.example               # Example environment variables
+├── next-env.d.ts             # Next.js type definitions
+├── next.config.js            # Next.js config
+├── package.json              # Project metadata and scripts
+├── postcss.config.js         # PostCSS config
+├── supabase-setup.sql        # Database setup script
+├── tailwind.config.js        # Tailwind CSS config
+├── test-env.js               # Test environment setup
+├── tsconfig.json             # TypeScript config
+└── README.md                 # This file
 ```
 
 ## Key Features Implementation
