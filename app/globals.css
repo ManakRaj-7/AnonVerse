@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #374151;
+  --muted: #f9fafb;
+  --muted-foreground: #6b7280;
+  --accent: #f3f4f6;
+  --accent-foreground: #171717;
+  --border: #e5e7eb;
+  --input: #ffffff;
+  --ring: #2563eb;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --secondary: #1f2937;
+    --secondary-foreground: #d1d5db;
+    --muted: #111827;
+    --muted-foreground: #9ca3af;
+    --accent: #1f2937;
+    --accent-foreground: #f9fafb;
+    --border: #374151;
+    --input: #1f2937;
+    --ring: #3b82f6;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --card: #0a0a0a;
+    --card-foreground: #ededed;
+  }
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
