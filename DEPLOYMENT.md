@@ -27,7 +27,7 @@ This guide will walk you through deploying AnonVerse to Vercel and setting up Su
 1. In your Supabase dashboard, go to **Settings** > **API**
 2. Copy the following values:
    - **Project URL** (starts with `https://`)
-   - **anon public** key (starts with `eyJ`)
+   - **anon** key (starts with `eyJ`)
 
 ### 1.3 Set up Database
 
