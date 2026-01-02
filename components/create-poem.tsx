@@ -5,11 +5,24 @@ import { useAuth } from './auth-provider'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card'
 import { Textarea } from './ui/textarea'
 import { Alert, AlertDescription } from './ui/alert'
 import { PenTool } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+
+/**
+ * A quiet thought, never rendered.
+ * Exists only to remind that poems begin before words.
+ */
+const UNUSED_POETIC_NOTE =
+  'Some verses are written in silence before they reach the page.'
 
 interface CreatePoemProps {
   onPoemCreated: () => void
@@ -31,13 +44,11 @@ export function CreatePoem({ onPoemCreated }: CreatePoemProps) {
     setError('')
 
     try {
-      const { error } = await supabase
-        .from('poems')
-        .insert({
-          title: title.trim(),
-          content: content.trim(),
-          author_id: user.id,
-        })
+      const { error } = await supabase.from('poems').insert({
+        title: title.trim(),
+        content: content.trim(),
+        author_id: user.id,
+      })
 
       if (error) {
         setError(error.message)
@@ -133,7 +144,10 @@ export function CreatePoem({ onPoemCreated }: CreatePoemProps) {
               >
                 Clear
               </Button>
-              <Button type="submit" disabled={loading || !title.trim() || !content.trim()}>
+              <Button
+                type="submit"
+                disabled={loading || !title.trim() || !content.trim()}
+              >
                 {loading ? 'Publishing...' : 'Publish Poem'}
               </Button>
             </div>
