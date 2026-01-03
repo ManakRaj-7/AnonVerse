@@ -6,7 +6,13 @@ import { useAuth } from './auth-provider'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card'
 import { Alert, AlertDescription } from './ui/alert'
 import { BookOpen } from 'lucide-react'
 
@@ -57,9 +63,10 @@ export function AuthForm() {
     }
   }
 
+  // ✅ FIXED: redirect to root (tab-based navigation)
   const handleGuestAccess = () => {
     localStorage.setItem('anonverse_guest', 'true')
-    router.push('/feed')
+    router.push('/')
   }
 
   return (
@@ -79,7 +86,9 @@ export function AuthForm() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-center">Welcome to AnonVerse</CardTitle>
+            <CardTitle className="text-center">
+              Welcome to AnonVerse
+            </CardTitle>
             <CardDescription className="text-center">
               {isSignUp
                 ? 'Create your anonymous profile'
@@ -124,7 +133,7 @@ export function AuthForm() {
                     type="email"
                     placeholder="your@email.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     required
                   />
                 </div>
@@ -135,7 +144,7 @@ export function AuthForm() {
                     id="password"
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     required
                   />
                 </div>
@@ -155,7 +164,7 @@ export function AuthForm() {
                     id="penName"
                     placeholder="Your anonymous pen name"
                     value={penName}
-                    onChange={(e) => setPenName(e.target.value)}
+                    onChange={e => setPenName(e.target.value)}
                     required
                   />
                 </div>
@@ -167,7 +176,7 @@ export function AuthForm() {
                     type="email"
                     placeholder="your@email.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     required
                   />
                 </div>
@@ -178,7 +187,7 @@ export function AuthForm() {
                     id="signup-password"
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     required
                   />
                 </div>
