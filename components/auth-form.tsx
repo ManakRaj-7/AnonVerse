@@ -36,6 +36,9 @@ export function AuthForm() {
     setShowResend(false)
 
     try {
+      // ✅ IMPORTANT FIX: clear guest mode on real authentication
+      localStorage.removeItem('anonverse_guest')
+
       if (isSignUp) {
         await signUp(email, password, penName)
       } else {
@@ -63,7 +66,7 @@ export function AuthForm() {
     }
   }
 
-  // ✅ FIXED: redirect to root (tab-based navigation)
+  // Guest entry (tab-based navigation → root)
   const handleGuestAccess = () => {
     localStorage.setItem('anonverse_guest', 'true')
     router.push('/')
