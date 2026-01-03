@@ -28,7 +28,12 @@ interface PoemCardProps {
   onCommentAdded: () => void
 }
 
-export function PoemCard({ poem, onLike, onUnlike, onCommentAdded }: PoemCardProps) {
+export function PoemCard({
+  poem,
+  onLike,
+  onUnlike,
+  onCommentAdded,
+}: PoemCardProps) {
   const { user } = useAuth()
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<Comment[]>([])
@@ -48,20 +53,15 @@ export function PoemCard({ poem, onLike, onUnlike, onCommentAdded }: PoemCardPro
     try {
       const { data, error } = await supabase
         .from('comments')
-        .select(`
-          *,
-          profiles (*)
-        `)
+        .select(`*, profiles (*)`)
         .eq('poem_id', poem.id)
         .order('created_at', { ascending: true })
 
-      if (error) {
-        console.error('Error fetching comments:', error)
-      } else {
+      if (!error) {
         setComments(data || [])
       }
-    } catch (error) {
-      console.error('Error fetching comments:', error)
+    } catch (err) {
+      console.error('Error fetching comments:', err)
     } finally {
       setLoadingComments(false)
     }
@@ -73,34 +73,26 @@ export function PoemCard({ poem, onLike, onUnlike, onCommentAdded }: PoemCardPro
 
     setSubmittingComment(true)
     try {
-      const { error } = await supabase
-        .from('comments')
-        .insert({
-          poem_id: poem.id,
-          author_id: user.id,
-          content: newComment.trim(),
-        })
+      const { error } = await supabase.from('comments').insert({
+        poem_id: poem.id,
+        author_id: user.id,
+        content: newComment.trim(),
+      })
 
-      if (error) {
-        console.error('Error adding comment:', error)
-      } else {
+      if (!error) {
         setNewComment('')
         await fetchComments()
         onCommentAdded()
       }
-    } catch (error) {
-      console.error('Error adding comment:', error)
+    } catch (err) {
+      console.error('Error adding comment:', err)
     } finally {
       setSubmittingComment(false)
     }
   }
 
   const handleLikeClick = () => {
-    if (poem.is_liked) {
-      onUnlike()
-    } else {
-      onLike()
-    }
+    poem.is_liked ? onUnlike() : onLike()
   }
 
   return (
@@ -118,87 +110,90 @@ export function PoemCard({ poem, onLike, onUnlike, onCommentAdded }: PoemCardPro
         </div>
         <h3 className="text-xl font-semibold">{poem.title}</h3>
       </CardHeader>
-      
+
       <CardContent>
         <div className="prose prose-sm max-w-none mb-4">
           <p className="whitespace-pre-wrap">{poem.content}</p>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLikeClick}
-              className={`flex items-center space-x-1 ${
-                poem.is_liked ? 'text-red-500' : 'text-muted-foreground'
-              }`}
-            >
-              <Heart className={`h-4 w-4 ${poem.is_liked ? 'fill-current' : ''}`} />
-              <span>{poem.likes_count}</span>
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleToggleComments}
-              className="flex items-center space-x-1"
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span>{poem.comments_count}</span>
-            </Button>
-          </div>
+        <div className="flex items-center space-x-4">
+          {/* ❤️ Likes */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLikeClick}
+            className={`flex items-center space-x-1 ${
+              poem.is_liked ? 'text-red-500' : 'text-muted-foreground'
+            }`}
+          >
+            <Heart
+              className={`h-4 w-4 ${poem.is_liked ? 'fill-current' : ''}`}
+            />
+            <span>{poem.likes_count}</span>
+          </Button>
+
+          {/* 💬 Comments (ICON ONLY, NO COUNT) */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleToggleComments}
+            className="flex items-center"
+          >
+            <MessageCircle className="h-4 w-4" />
+          </Button>
         </div>
 
         {showComments && (
-          <div className="mt-6 space-y-4">
-            <div className="border-t pt-4">
-              <h4 className="font-medium mb-3">Comments</h4>
-              
-              {loadingComments ? (
-                <div className="text-center py-4">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
-                </div>
-              ) : comments.length === 0 ? (
-                <p className="text-muted-foreground text-sm">No comments yet.</p>
-              ) : (
-                <div className="space-y-3">
-                  {comments.map((comment) => (
-                    <div key={comment.id} className="flex space-x-3">
-                      <div className="flex-shrink-0">
-                        <User className="h-6 w-6 text-muted-foreground" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="font-medium text-sm">
-                            {comment.profiles.pen_name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {formatRelativeTime(comment.created_at)}
-                          </span>
-                        </div>
-                        <p className="text-sm mt-1">{comment.content}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+          <div className="mt-6 border-t pt-4 space-y-4">
+            <h4 className="font-medium">Comments</h4>
 
-              {user && (
-                <form onSubmit={handleSubmitComment} className="mt-4 flex space-x-2">
-                  <Input
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Add a comment..."
-                    className="flex-1"
-                    disabled={submittingComment}
-                  />
-                  <Button type="submit" size="sm" disabled={submittingComment || !newComment.trim()}>
-                    {submittingComment ? 'Posting...' : 'Post'}
-                  </Button>
-                </form>
-              )}
-            </div>
+            {loadingComments ? (
+              <div className="flex justify-center py-4">
+                <div className="animate-spin h-6 w-6 border-b-2 border-primary rounded-full" />
+              </div>
+            ) : comments.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                No comments yet.
+              </p>
+            ) : (
+              comments.map(comment => (
+                <div key={comment.id} className="flex space-x-3">
+                  <User className="h-5 w-5 text-muted-foreground mt-1" />
+                  <div>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="font-medium">
+                        {comment.profiles.pen_name}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatRelativeTime(comment.created_at)}
+                      </span>
+                    </div>
+                    <p className="text-sm">{comment.content}</p>
+                  </div>
+                </div>
+              ))
+            )}
+
+            {user && (
+              <form
+                onSubmit={handleSubmitComment}
+                className="flex space-x-2 pt-2"
+              >
+                <Input
+                  value={newComment}
+                  onChange={e => setNewComment(e.target.value)}
+                  placeholder="Add a comment..."
+                  disabled={submittingComment}
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={submittingComment || !newComment.trim()}
+                >
+                  Post
+                </Button>
+              </form>
+            )}
           </div>
         )}
       </CardContent>
