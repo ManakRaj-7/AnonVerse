@@ -46,16 +46,21 @@ export function PoemFeed() {
       const transformedPoems =
         data?.map(poem => ({
           ...poem,
+
+          // ✅ FIXED: read actual aggregate count
           likes_count: Array.isArray(poem.likes_count)
-            ? poem.likes_count.length
+            ? poem.likes_count[0]?.count ?? 0
             : 0,
+
+          // keep this for now (UI will ignore number later)
           comments_count: Array.isArray(poem.comments_count)
-            ? poem.comments_count.length
+            ? poem.comments_count[0]?.count ?? 0
             : 0,
+
           is_liked: false,
         })) || []
 
-      // Only check likes for authenticated users
+      // Only check likes for logged-in users
       if (user && transformedPoems.length > 0) {
         const poemIds = transformedPoems.map(poem => poem.id)
 
