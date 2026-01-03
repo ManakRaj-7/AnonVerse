@@ -7,21 +7,37 @@ import { PoemFeed } from './poem-feed'
 import { CreatePoem } from './create-poem'
 import { Profile } from './profile'
 import { supabase } from '@/lib/supabase'
+import { isGuestUser } from '@/lib/isGuest'
 import type { Database } from '@/lib/supabase'
 
-type Profile = Database['public']['Tables']['profiles']['Row']
+type ProfileType = Database['public']['Tables']['profiles']['Row']
 
 export function MainApp() {
   const { user, signOut } = useAuth()
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const isGuest = isGuestUser()
+
+  const [profile, setProfile] = useState<ProfileType | null>(null)
   const [activeTab, setActiveTab] = useState<'feed' | 'create' | 'profile'>('feed')
   const [loading, setLoading] = useState(true)
 
+  // 🔹 Handle guest users
+  useEffect(() => {
+    if (isGuest) {
+      setActiveTab('feed')
+      setLoading(false)
+    }
+  }, [isGuest])
+
+  // 🔹 Handle authenticated users
   useEffect(() => {
     if (user) {
       fetchProfile()
     }
-  }, [user])
+    if (!user && !isGuest) {
+      // Logged out (not guest)
+      setLoading(false)
+    }
+  }, [user, isGuest])
 
   const fetchProfile = async () => {
     if (!user) return
@@ -37,6 +53,7 @@ export function MainApp() {
     } else {
       setProfile(data)
     }
+
     setLoading(false)
   }
 
@@ -50,17 +67,21 @@ export function MainApp() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation 
-        profile={profile} 
-        activeTab={activeTab} 
+      <Navigation
+        profile={profile}
+        activeTab={activeTab}
         onTabChange={setActiveTab}
         onSignOut={signOut}
       />
-      
+
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {activeTab === 'feed' && <PoemFeed />}
-        {activeTab === 'create' && <CreatePoem onPoemCreated={() => setActiveTab('feed')} />}
-        {activeTab === 'profile' && <Profile profile={profile} onProfileUpdate={fetchProfile} />}
+        {activeTab === 'create' && !isGuest && (
+          <CreatePoem onPoemCreated={() => setActiveTab('feed')} />
+        )}
+        {activeTab === 'profile' && !isGuest && profile && (
+          <Profile profile={profile} onProfileUpdate={fetchProfile} />
+        )}
       </main>
     </div>
   )
