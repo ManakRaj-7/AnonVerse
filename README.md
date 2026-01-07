@@ -149,30 +149,30 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 
 ## Future Enhancements
 
-The application is designed to be easily extensible for:
+The application is designed to be easily extensible and can support:
 
-- **Monetization**: Token tipping system
-- **Advanced Social Features**: Follow/unfollow, user discovery
-- **Content Moderation**: Report system, admin panel
-- **Analytics**: View counts, engagement metrics
-- **Rich Content**: Image uploads, formatting options
-- **Notifications**: Real-time notifications for interactions
+- Monetization through a token-based tipping system
+- Advanced social features such as follow/unfollow and user discovery
+- Content moderation including a report system and admin panel
+- Analytics with view counts and engagement metrics
+- Rich content support with image uploads and formatting options
+- Real-time notifications for user interactions
 
 ## Security Features
 
-- Row Level Security (RLS) on all database tables
-- User authentication required for write operations
+- Row Level Security (RLS) enabled on all database tables
+- Authentication required for all write operations
 - Input validation and sanitization
-- Secure API endpoints
-- Environment variable protection
+- Secured API endpoints
+- Protection of sensitive configuration via environment variables
 
 ## Performance Optimizations
 
-- Database indexes for fast queries
-- Optimistic UI updates
-- Efficient data fetching
-- Minimal bundle size with tree shaking
-- Responsive images and lazy loading ready
+- Database indexing for faster query execution
+- Optimistic UI updates to improve responsiveness
+- Efficient data fetching strategies
+- Reduced bundle size using tree shaking
+- Support for responsive images and lazy loading
 
 ## Contributing
 
