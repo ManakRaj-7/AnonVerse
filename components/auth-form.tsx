@@ -18,7 +18,6 @@ import { BookOpen } from 'lucide-react'
 
 export function AuthForm() {
   const router = useRouter()
-
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
